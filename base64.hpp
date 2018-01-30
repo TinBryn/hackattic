@@ -4,7 +4,10 @@
 /*
  * functions for encoding sequences that are convertible to chars into
  * base64 encoded bytes into memory that is assignable from chars.
- * There is also a function for the reverse
+ * There is also a function for the reverse.
+ *
+ * On notation (type) means something that is either implicitly convertable
+ * to type or from type
  */
 
 #include<type_traits> //for SFINAE
