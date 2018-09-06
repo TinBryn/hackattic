@@ -3,4 +3,10 @@ project(hackattic)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(hackattic main.cpp base64.hpp base64_test.cpp)
+include_directories(common/include)
+
+add_executable(hackattic
+        common/include/base64.hpp
+        common/test/base64_test.cpp
+        main.cpp
+        README.md)

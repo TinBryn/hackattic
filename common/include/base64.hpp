@@ -22,15 +22,15 @@ namespace detail {
     {
         if('0' <= elem && '9' >= elem)
         {
-            return elem - '0' + 52;
+            return static_cast<unsigned char>(elem - '0' + 52);
         }
         if('A' <= elem && 'Z' >= elem)
         {
-            return elem - 'A' + 0;
+            return static_cast<unsigned char>(elem - 'A' + 0);
         }
         if('a' <= elem && 'z' >= elem)
         {
-            return elem - 'a' + 26;
+            return static_cast<unsigned char>(elem - 'a' + 26);
         }
         if('+' == elem)
         {
@@ -45,7 +45,7 @@ namespace detail {
 
     unsigned char get_6bit(unsigned int input, int n)
     {
-        return (input & (0x3f << n*6)) >> n*6;
+        return static_cast<unsigned char>((input & (0x3f << n * 6)) >> n * 6);
     }
 
     unsigned int encode1byte(unsigned int input)
@@ -61,8 +61,8 @@ namespace detail {
         output_pack[3] = get_6bit(input, 3);
 
         //encode the bytes;
-        output_pack[2] = encoding[output_pack[2]];
-        output_pack[3] = encoding[output_pack[3]];
+        output_pack[2] = (byte) encoding[output_pack[2]];
+        output_pack[3] = (byte) encoding[output_pack[3]];
 
         return *reinterpret_cast<unsigned int*>(output_pack);
     }
@@ -80,9 +80,9 @@ namespace detail {
         output_pack[3] = get_6bit(input, 3);
 
         //encode the bytes;
-        output_pack[1] = encoding[output_pack[1]];
-        output_pack[2] = encoding[output_pack[2]];
-        output_pack[3] = encoding[output_pack[3]];
+        output_pack[1] = (byte) encoding[output_pack[1]];
+        output_pack[2] = (byte) encoding[output_pack[2]];
+        output_pack[3] = (byte) encoding[output_pack[3]];
 
         return *reinterpret_cast<unsigned int*>(output_pack);
     }
@@ -100,17 +100,17 @@ namespace detail {
         output_pack[3] = get_6bit(input, 3);
 
         //encode the bytes;
-        output_pack[0] = encoding[output_pack[0]];
-        output_pack[1] = encoding[output_pack[1]];
-        output_pack[2] = encoding[output_pack[2]];
-        output_pack[3] = encoding[output_pack[3]];
+        output_pack[0] = (byte) encoding[output_pack[0]];
+        output_pack[1] = (byte) encoding[output_pack[1]];
+        output_pack[2] = (byte) encoding[output_pack[2]];
+        output_pack[3] = (byte) encoding[output_pack[3]];
 
         return *reinterpret_cast<unsigned int*>(output_pack);
     }
 
     unsigned char get_byte(unsigned int input, int n)
     {
-        return (input & (0xff << n*8)) >> n*8;
+        return static_cast<unsigned char>((input & (0xff << n * 8)) >> n * 8);
     }
 
     unsigned int decode_pack(unsigned int pack)
@@ -203,14 +203,14 @@ OutIt decode(InIt start, InIt end, OutIt out)
                 }
             }
         }
-        for(int i=0; i<4; i++)
+        for (unsigned char &i : input_pack)
         {
-            input_pack[i] = ('=' == input_pack[i]) ? 'A' : input_pack[i];
+            i = static_cast<unsigned char>(('=' == i) ? 'A' : i);
         }
 
-        for(int i=0; i<4; i++)
+        for (unsigned char &i : input_pack)
         {
-            input_pack[i] = detail::decode_elem(input_pack[i]);
+            i = detail::decode_elem(i);
         }
         inter_pack = (input_pack[0] << 18)
                    + (input_pack[1] << 12)
